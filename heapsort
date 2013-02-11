@@ -1,0 +1,76 @@
+#include <stdio.h>
+
+int heap[10];
+int heapSize;
+
+void creatMinHeap()
+{
+    heapSize=0;
+}
+
+
+void insertElement(int element)
+{
+   heap[heapSize] = element;
+
+    int nowPosition = heapSize;
+    while(heap[(nowPosition-1)/2] > element){
+           heap[nowPosition] = heap[(nowPosition-1)/2];
+           nowPosition = (nowPosition-1)/2;
+           heap[nowPosition] = element;
+    }
+    heapSize++;
+}
+
+
+int deleteMinHeap()
+{
+    int minElement = heap[0];
+    int nowPosition = 0;
+    int childPosition = nowPosition*2+1;
+    heap[0] = heap[heapSize-1];
+    heapSize--;
+
+    while(childPosition <= heapSize){
+            //if exist rightchild and leftchild is bigger than rightchild, use the small child
+            if(childPosition+1 < heapSize && heap[childPosition] > heap[childPosition+1])
+            {
+                      childPosition = childPosition + 1;
+            }
+
+             //if the small child is no less than the now position point, break
+            if(heap[childPosition] >= heap[nowPosition]){
+                      break;
+            }else{
+            //else change the point with its child
+                      int swap = heap[nowPosition];
+                      heap[nowPosition] = heap[childPosition];
+                      heap[childPosition] = swap;
+
+                      nowPosition = childPosition;
+                      childPosition = childPosition*2 + 1;
+            }
+    }
+
+    return minElement;
+}
+
+
+main()
+{
+      int heapElementSize, element,i,j;
+      scanf("%d", &heapElementSize);
+      creatMinHeap();
+
+      for(i=0; i<heapElementSize; i++){
+              scanf("%d", &element);
+              insertElement(element);
+      }
+
+       for(j=0; j<heapElementSize; j++){
+             printf("%d, ", deleteMinHeap());
+       }
+
+       printf("\n");
+       return 0;
+}
